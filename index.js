@@ -1,5 +1,5 @@
 import DNA from "./DNA.js";
-import GeneticAlgorithm from "../GeneticAlgorithm.js";
+import GeneticAlgorithm from "./GeneticAlgorithm.js";
 import Professor from "./Professor.js";
 import Batch from "./Batch.js";
 
