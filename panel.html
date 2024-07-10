@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Control Panel - Time Table Schedule Generator</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+      }
+
+      nav {
+        background-color: #007bff;
+        color: white;
+        padding: 1em;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      nav .logo {
+        font-size: 1.5em;
+        font-weight: bold;
+      }
+
+      nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+      }
+
+      nav ul li {
+        margin-left: 1.5em;
+      }
+
+      nav ul li a {
+        color: white;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      nav ul li a:hover {
+        color: #ddd;
+      }
+
+      .container {
+        padding: 2em;
+      }
+
+      .tabs {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 2em;
+      }
+
+      .tabs button {
+        background-color: #007bff;
+        color: white;
+        padding: 1em 2em;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .tabs button:hover {
+        background-color: #0056b3;
+      }
+
+      .tabs button.active {
+        background-color: #0056b3;
+      }
+
+      .tab-content {
+        display: none;
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 2em;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 5px;
+      }
+
+      form label {
+        margin-bottom: 0.5em;
+        font-weight: bold;
+      }
+
+      form input,
+      form select {
+        margin-bottom: 1em;
+        padding: 0.5em;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+      }
+
+      form .subjects-container {
+        margin-bottom: 1em;
+      }
+
+      form .subjects-container div {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5em;
+      }
+
+      form .subjects-container div input {
+        margin-right: 0.5em;
+        flex: 1;
+      }
+
+      form .subjects-container div button {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 0.5em;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+      }
+
+      form .subjects-container div button:hover {
+        background-color: #c82333;
+      }
+
+      form button {
+        background-color: #007bff;
+        color: white;
+        padding: 1em;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      form button:hover {
+        background-color: #0056b3;
+      }
+
+      .add-subject-btn {
+        background-color: #28a745;
+        color: white;
+        padding: 0.5em;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+        margin-bottom: 1em;
+      }
+
+      .add-subject-btn:hover {
+        background-color: #218838;
+      }
+      .subject-div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .subject-div input {
+        margin-bottom: 0;
+      }
+      .added-profs {
+        display: flex;
+        flex-direction: column;
+        max-width: 600px;
+        margin: 20px auto;
+        align-items: flex-start;
+        justify-content: flex-start;
+      }
+      .added-prof-card {
+        background-color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+      }
+      .added-prof-card p {
+        margin: 5px 0;
+      }
+      .added-prof-card p span {
+        font-weight: bold;
+      }
+      .btn {
+        display: flex;
+        margin: 20px auto;
+        outline: none;
+        border: none;
+        background-color: #007bff;
+        color: white;
+        padding: 10px 20px;
+        font-size: 18px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+    </style>
+    <script>
+      function showTab(tabIndex) {
+        const tabs = document.querySelectorAll(".tab-content");
+        tabs.forEach((tab, index) => {
+          tab.classList.toggle("active", index === tabIndex);
+        });
+
+        const tabButtons = document.querySelectorAll(".tabs button");
+        tabButtons.forEach((button, index) => {
+          button.classList.toggle("active", index === tabIndex);
+        });
+      }
+
+      function addSubject(containerId) {
+        const container = document.getElementById(containerId);
+        const subjectDiv = document.createElement("div");
+        subjectDiv.classList.add("subject-div");
+        const subjectInput = document.createElement("input");
+        subjectInput.type = "text";
+        subjectInput.name = "subjects[]";
+        subjectInput.placeholder = "Subject Name";
+        subjectInput.required = true;
+
+        const hoursInput = document.createElement("input");
+        hoursInput.type = "number";
+        hoursInput.name = "hours[]";
+        hoursInput.placeholder = "Weekly Hours";
+        hoursInput.min = "1";
+        hoursInput.required = true;
+
+        const removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.textContent = "Remove";
+        removeBtn.onclick = () => container.removeChild(subjectDiv);
+
+        subjectDiv.appendChild(subjectInput);
+        if (containerId !== "profSubjects") subjectDiv.appendChild(hoursInput);
+        subjectDiv.appendChild(removeBtn);
+        container.appendChild(subjectDiv);
+      }
+    </script>
+  </head>
+  <body>
+    <nav>
+      <div class="logo">Time Table Generator</div>
+      <ul>
+        <li><a href="./home.html">Home</a></li>
+        <li>Control Panel</li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <div class="tabs">
+        <button class="active" onclick="showTab(0)">Professors</button>
+        <button onclick="showTab(1)">Classes</button>
+        <button onclick="showTab(2)">Rooms</button>
+      </div>
+
+      <div id="professors" class="tab-content active">
+        <div class="added-profs" id="added-profs"></div>
+        <form id="professorForm">
+          <label for="profName">Professor Name</label>
+          <input type="text" id="profName" name="profName" required />
+
+          <label>Subjects Taught</label>
+          <div id="profSubjects" class="subjects-container">
+            <div class="subject-div">
+              <input
+                type="text"
+                name="subjects[]"
+                placeholder="Subject Name"
+                required=""
+              />
+            </div>
+          </div>
+          <button
+            type="button"
+            class="add-subject-btn"
+            onclick="addSubject('profSubjects')"
+          >
+            Add Subject
+          </button>
+
+          <button type="submit">Add Professor</button>
+        </form>
+      </div>
+
+      <div id="classes" class="tab-content">
+        <div class="added-profs" id="added-classes"></div>
+
+        <form id="classForm">
+          <label for="className">Class Name</label>
+          <input type="text" id="className" name="className" required />
+
+          <label>Subjects Studied</label>
+          <div id="classSubjects" class="subjects-container">
+            <div class="subject-div">
+              <input
+                type="text"
+                name="subjects[]"
+                placeholder="Subject Name"
+                required=""
+              /><input
+                type="number"
+                name="hours[]"
+                placeholder="Weekly Hours"
+                min="1"
+                required=""
+              />
+            </div>
+          </div>
+          <button
+            type="button"
+            class="add-subject-btn"
+            onclick="addSubject('classSubjects')"
+          >
+            Add Subject
+          </button>
+
+          <label for="classStudents">Number of Students</label>
+          <input
+            type="number"
+            id="classStudents"
+            name="classStudents"
+            required
+          />
+
+          <button type="submit">Add Class</button>
+        </form>
+      </div>
+
+      <div id="rooms" class="tab-content">
+        <div class="added-profs" id="added-rooms"></div>
+
+        <form id="roomForm">
+          <label for="roomNumber">Room Number</label>
+          <input type="text" id="roomNumber" name="roomNumber" required />
+
+          <label for="roomCapacity">Max Capacity</label>
+          <input type="number" id="roomCapacity" name="roomCapacity" required />
+
+          <button type="submit">Add Room</button>
+        </form>
+      </div>
+
+      <button id="start" class="btn">Generate Schedules</button>
+    </div>
+
+    <script type="module">
+      import Professor from "./Professor.js";
+      import Batch from "./Batch.js";
+
+      let profs = [],
+        classes = [],
+        rooms = [];
+
+      document
+        .getElementById("professorForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          // Add professor logic
+          let data = new FormData(e.target);
+          data = [...data.entries()];
+
+          let name,
+            subs = [];
+
+          for (let el of data) {
+            if (el[0] === "subjects[]") subs.push(el[1]);
+            else name = el[1];
+          }
+          profs.push(new Professor(name, subs));
+
+          e.target.reset();
+
+          view(profs, "profs");
+        });
+
+      document
+        .getElementById("classForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          // Add professor logic
+          let data = new FormData(e.target);
+          data = [...data.entries()];
+
+          let name,
+            subs = [],
+            strength;
+
+          for (let i = 0; i < data.length; i++) {
+            if (data[i][0] === "subjects[]") {
+              subs.push([data[i][1], data[i + 1][1]]);
+              i++;
+            } else if (data[i][0] === "className") name = data[i][1];
+            else strength = data[i][1];
+          }
+          classes.push(new Batch(name, subs, strength));
+
+          console.log(classes);
+
+          e.target.reset();
+
+          view(classes, "classes");
+        });
+
+      document
+        .getElementById("roomForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          let data = new FormData(e.target);
+          data = [...data.entries()];
+
+          let name = data[0][1],
+            str = data[1][1];
+          rooms.push([name, str]);
+          console.log(rooms);
+
+          e.target.reset();
+
+          view(rooms, "rooms");
+        });
+
+      function view(arr, type) {
+        if (type === "profs") {
+          let cont = document.getElementById("added-profs");
+          cont.innerHTML = "";
+
+          for (let prof of arr) {
+            let div = document.createElement("div");
+            div.classList.add("added-prof-card");
+            div.innerHTML = `<p><span>Name:</span> ${
+              prof.name
+            }</p> <p><span>Subjects:</span> ${prof.subjects.join(",")}</p>`;
+            cont.append(div);
+          }
+        } else if (type === "classes") {
+          let cont = document.getElementById("added-classes");
+          cont.innerHTML = "";
+
+          for (let cl of arr) {
+            let div = document.createElement("div");
+            div.classList.add("added-prof-card");
+            div.innerHTML = `<p><span>Name:</span> ${
+              cl.name
+            }</p> <p><span>Subjects:</span> ${cl.subjects.join(
+              ","
+            )}</p><p><span>Strength:</span> ${cl.strength}</p>`;
+            cont.append(div);
+          }
+        } else {
+          let cont = document.getElementById("added-rooms");
+          cont.innerHTML = "";
+
+          for (let cl of arr) {
+            let div = document.createElement("div");
+            div.classList.add("added-prof-card");
+            div.innerHTML = `<p><span>Room number:</span> ${cl[0]}</p> <p><span>Max Capacity:</span> ${cl[1]}</p>`;
+            cont.append(div);
+          }
+        }
+      }
+      document.getElementById("start").addEventListener("click", () => {
+        if (profs.length == 0 || classes.length == 0 || rooms.length == 0) {
+          alert("Please add professors, classes, and rooms!");
+          return;
+        }
+
+        localStorage.setItem("Profs", JSON.stringify(profs));
+        localStorage.setItem("Rooms", JSON.stringify(rooms));
+        localStorage.setItem("Classes", JSON.stringify(classes));
+
+        let a = document.createElement("a");
+        a.href = "./index.html";
+        a.click();
+      });
+    </script>
+  </body>
+</html>
