@@ -53,12 +53,18 @@
 
       .container {
         padding: 2em;
+        min-height: 90vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
       }
 
       .tabs {
         display: flex;
         justify-content: center;
         margin-bottom: 2em;
+        width: 100%;
       }
 
       .tabs button {
@@ -68,6 +74,7 @@
         border: none;
         cursor: pointer;
         transition: background-color 0.3s;
+        width: 33.33%;
       }
 
       .tabs button:hover {
@@ -208,6 +215,25 @@
         cursor: pointer;
         border-radius: 5px;
       }
+      .bottom {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        margin: 0 auto;
+        max-width: 600px;
+        text-align: center;
+        color: #9d9d9d;
+      }
+      @media screen and (max-width: 480px) {
+        nav .logo {
+          font-size: 18px;
+        }
+      }
+      .cont {
+        width: 95vw;
+        max-width: 600px;
+      }
     </style>
     <script>
       function showTab(tabIndex) {
@@ -261,100 +287,116 @@
     </nav>
 
     <div class="container">
-      <div class="tabs">
-        <button class="active" onclick="showTab(0)">Professors</button>
-        <button onclick="showTab(1)">Classes</button>
-        <button onclick="showTab(2)">Rooms</button>
-      </div>
+      <div class="cont">
+        <div class="tabs">
+          <button class="active" onclick="showTab(0)">Professors</button>
+          <button onclick="showTab(1)">Classes</button>
+          <button onclick="showTab(2)">Rooms</button>
+        </div>
 
-      <div id="professors" class="tab-content active">
-        <div class="added-profs" id="added-profs"></div>
-        <form id="professorForm">
-          <label for="profName">Professor Name</label>
-          <input type="text" id="profName" name="profName" required />
+        <div id="professors" class="tab-content active">
+          <div class="added-profs" id="added-profs"></div>
+          <form id="professorForm">
+            <label for="profName">Professor Name</label>
+            <input type="text" id="profName" name="profName" required />
 
-          <label>Subjects Taught</label>
-          <div id="profSubjects" class="subjects-container">
-            <div class="subject-div">
-              <input
-                type="text"
-                name="subjects[]"
-                placeholder="Subject Name"
-                required=""
-              />
+            <label>Subjects Taught</label>
+            <div id="profSubjects" class="subjects-container">
+              <div class="subject-div">
+                <input
+                  type="text"
+                  name="subjects[]"
+                  placeholder="Subject Name"
+                  required=""
+                />
+              </div>
             </div>
-          </div>
-          <button
-            type="button"
-            class="add-subject-btn"
-            onclick="addSubject('profSubjects')"
-          >
-            Add Subject
-          </button>
+            <button
+              type="button"
+              class="add-subject-btn"
+              onclick="addSubject('profSubjects')"
+            >
+              Add Subject
+            </button>
 
-          <button type="submit">Add Professor</button>
-        </form>
-      </div>
+            <button type="submit">Add Professor</button>
+          </form>
+        </div>
 
-      <div id="classes" class="tab-content">
-        <div class="added-profs" id="added-classes"></div>
+        <div id="classes" class="tab-content">
+          <div class="added-profs" id="added-classes"></div>
 
-        <form id="classForm">
-          <label for="className">Class Name</label>
-          <input type="text" id="className" name="className" required />
+          <form id="classForm">
+            <label for="className">Class Name</label>
+            <input type="text" id="className" name="className" required />
 
-          <label>Subjects Studied</label>
-          <div id="classSubjects" class="subjects-container">
-            <div class="subject-div">
-              <input
-                type="text"
-                name="subjects[]"
-                placeholder="Subject Name"
-                required=""
-              /><input
-                type="number"
-                name="hours[]"
-                placeholder="Weekly Hours"
-                min="1"
-                required=""
-              />
+            <label>Subjects Studied</label>
+            <div id="classSubjects" class="subjects-container">
+              <div class="subject-div">
+                <input
+                  type="text"
+                  name="subjects[]"
+                  placeholder="Subject Name"
+                  required=""
+                /><input
+                  type="number"
+                  name="hours[]"
+                  placeholder="Weekly Hours"
+                  min="1"
+                  required=""
+                />
+              </div>
             </div>
-          </div>
-          <button
-            type="button"
-            class="add-subject-btn"
-            onclick="addSubject('classSubjects')"
-          >
-            Add Subject
-          </button>
+            <button
+              type="button"
+              class="add-subject-btn"
+              onclick="addSubject('classSubjects')"
+            >
+              Add Subject
+            </button>
 
-          <label for="classStudents">Number of Students</label>
-          <input
-            type="number"
-            id="classStudents"
-            name="classStudents"
-            required
-          />
+            <label for="classStudents">Number of Students</label>
+            <input
+              type="number"
+              id="classStudents"
+              name="classStudents"
+              required
+            />
 
-          <button type="submit">Add Class</button>
-        </form>
+            <button type="submit">Add Class</button>
+          </form>
+        </div>
+
+        <div id="rooms" class="tab-content">
+          <div class="added-profs" id="added-rooms"></div>
+
+          <form id="roomForm">
+            <label for="roomNumber">Room Number</label>
+            <input type="text" id="roomNumber" name="roomNumber" required />
+
+            <label for="roomCapacity">Max Capacity</label>
+            <input
+              type="number"
+              id="roomCapacity"
+              name="roomCapacity"
+              required
+            />
+
+            <button type="submit">Add Room</button>
+          </form>
+        </div>
+
+        <button id="start" class="btn">Generate Schedules</button>
       </div>
 
-      <div id="rooms" class="tab-content">
-        <div class="added-profs" id="added-rooms"></div>
-
-        <form id="roomForm">
-          <label for="roomNumber">Room Number</label>
-          <input type="text" id="roomNumber" name="roomNumber" required />
-
-          <label for="roomCapacity">Max Capacity</label>
-          <input type="number" id="roomCapacity" name="roomCapacity" required />
-
-          <button type="submit">Add Room</button>
-        </form>
+      <div class="bottom">
+        <p>
+          Don't want to make so many entries yourself and just want to see the
+          demo? Click on the button below to generate schedules for randomly
+          choosen professors, subjects, classes and rooms!
+        </p>
+        <button class="btn" id="random">See Demo</button>
       </div>
-
-      <button id="start" class="btn">Generate Schedules</button>
     </div>
 
     <script type="module">
@@ -377,8 +419,8 @@
             subs = [];
 
           for (let el of data) {
-            if (el[0] === "subjects[]") subs.push(el[1]);
-            else name = el[1];
+            if (el[0] === "subjects[]") subs.push(el[1].trim());
+            else name = el[1].trim();
           }
           profs.push(new Professor(name, subs));
 
@@ -401,9 +443,9 @@
 
           for (let i = 0; i < data.length; i++) {
             if (data[i][0] === "subjects[]") {
-              subs.push([data[i][1], data[i + 1][1]]);
+              subs.push([data[i][1].trim(), data[i + 1][1]]);
               i++;
-            } else if (data[i][0] === "className") name = data[i][1];
+            } else if (data[i][0] === "className") name = data[i][1].trim();
             else strength = data[i][1];
           }
           classes.push(new Batch(name, subs, strength));
@@ -422,7 +464,7 @@
           let data = new FormData(e.target);
           data = [...data.entries()];
 
-          let name = data[0][1],
+          let name = data[0][1].trim(),
             str = data[1][1];
           rooms.push([name, str]);
           console.log(rooms);
@@ -480,6 +522,15 @@
         localStorage.setItem("Profs", JSON.stringify(profs));
         localStorage.setItem("Rooms", JSON.stringify(rooms));
         localStorage.setItem("Classes", JSON.stringify(classes));
+
+        let a = document.createElement("a");
+        a.href = "./index.html";
+        a.click();
+      });
+      document.getElementById("random").addEventListener("click", () => {
+        localStorage.removeItem("Profs");
+        localStorage.removeItem("Rooms");
+        localStorage.removeItem("Classes");
 
         let a = document.createElement("a");
         a.href = "./index.html";

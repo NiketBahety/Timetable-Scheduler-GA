@@ -5,26 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, Helvetica, sans-serif;
+      }
       table {
         width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 20px;
-      }
-      th,
-      td {
-        border: 1px solid #ccc;
-        padding: 8px;
-        text-align: left;
-      }
-      caption {
-        font-weight: bold;
-        margin-bottom: 10px;
-      }
-      * {
-        font-family: sans-serif; /* Change your font family */
-      }
-
-      table {
         border-collapse: collapse;
         margin: 25px 0;
         font-size: 0.9em;
@@ -33,19 +21,23 @@
         overflow: hidden;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
       }
-
+      th,
+      td {
+        border: 1px solid #ccc;
+        text-align: left;
+        padding: 12px 15px;
+      }
+      caption {
+        font-weight: bold;
+        font-size: 17px;
+        margin: 10px;
+      }
       table thead tr {
         background-color: #009879;
         color: #ffffff;
         text-align: left;
         font-weight: bold;
       }
-
-      table th,
-      table td {
-        padding: 12px 15px;
-      }
-
       table tbody tr {
         border-bottom: 1px solid #dddddd;
       }
@@ -53,14 +45,17 @@
       table tbody tr:nth-of-type(even) {
         background-color: #f3f3f3;
       }
-
       table tbody tr:last-of-type {
         border-bottom: 2px solid #009879;
       }
-
       table tbody tr.active-row {
         font-weight: bold;
         color: #009879;
+      }
+      #gen,
+      #fitness {
+        font-size: 18px;
+        margin: 10px;
       }
     </style>
   </head>

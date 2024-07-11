@@ -124,9 +124,11 @@ for (let prof of profs) {
 }
 
 let days = ["MON", "TUE", "WED", "THU", "FRI"];
+let startHour = 9;
+let totalHours = 9;
 
 let slots = [];
-for (let i = 9; i < 18; i++) {
+for (let i = startHour; i < startHour + totalHours; i++) {
   if (i != 13) {
     for (let day of days) slots.push(day + i);
   }
@@ -151,7 +153,7 @@ function step() {
   document.getElementById("fitness").innerText =
     "Best fitness: " + fittest.fitness;
 
-  console.log(fittest.genes);
+  // console.log(fittest.genes);
 
   if (fittest.fitness == 1) {
     createTable(fittest.genes);
@@ -172,8 +174,7 @@ requestAnimationFrame(step);
 function createTable(fittest) {
   const container = document.getElementById("container");
 
-  const days = ["MON", "TUE", "WED", "THU", "FRI"];
-  const times = Array.from({ length: 10 }, (_, i) => i + 9); // Time slots from 9 to 18
+  const times = Array.from({ length: totalHours }, (_, i) => i + startHour); // Time slots from 9 to 18
 
   // Create Professor Tables
   let professorTables = new Map();
@@ -190,6 +191,7 @@ function createTable(fittest) {
       caption.textContent = `Schedule for ${professor.name}`;
       table.appendChild(caption);
 
+      let tableHead = document.createElement("thead");
       let headerRow = document.createElement("tr");
       headerRow.appendChild(document.createElement("th"));
       times.forEach((timeSlot) => {
@@ -197,8 +199,10 @@ function createTable(fittest) {
         th.textContent = `${timeSlot}:00`;
         headerRow.appendChild(th);
       });
-      table.appendChild(headerRow);
+      tableHead.appendChild(headerRow);
+      table.appendChild(tableHead);
 
+      let tableBody = document.createElement("tbody");
       days.forEach((day) => {
         let row = document.createElement("tr");
         let dayCell = document.createElement("th");
@@ -208,8 +212,9 @@ function createTable(fittest) {
           let cell = document.createElement("td");
           row.appendChild(cell);
         });
-        table.appendChild(row);
+        tableBody.appendChild(row);
       });
+      table.appendChild(tableBody);
 
       professorTables.set(professor.name, table);
       container.appendChild(table);
@@ -239,6 +244,7 @@ function createTable(fittest) {
       caption.textContent = `Schedule for ${batch.name} (Strength: ${batch.strength})`;
       table.appendChild(caption);
 
+      let tableHead = document.createElement("thead");
       let headerRow = document.createElement("tr");
       headerRow.appendChild(document.createElement("th"));
       times.forEach((timeSlot) => {
@@ -246,7 +252,10 @@ function createTable(fittest) {
         th.textContent = `${timeSlot}:00`;
         headerRow.appendChild(th);
       });
-      table.appendChild(headerRow);
+      tableHead.appendChild(headerRow);
+      table.appendChild(tableHead);
+
+      let tableBody = document.createElement("tbody");
 
       days.forEach((day) => {
         let row = document.createElement("tr");
@@ -257,8 +266,9 @@ function createTable(fittest) {
           let cell = document.createElement("td");
           row.appendChild(cell);
         });
-        table.appendChild(row);
+        tableBody.appendChild(row);
       });
+      table.appendChild(tableBody);
 
       batchTables.set(batch.name, table);
       container.appendChild(table);
